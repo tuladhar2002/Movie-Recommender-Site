@@ -1,0 +1,42 @@
+<%- include("partials/header.ejs") %>
+
+<section id="body-elements">
+    <div class="results-page-div col-lg-12">
+        <div class="searchbar-results col-lg-12">
+            <form action="/Movie" method="POST" class="searchbar-results">
+                <input class="form-control col-lg-12 search-bar" style="background-color: rgb(251, 251, 251);" id="exampleDataList" name="movieName" placeholder="Search Movie...">
+                <input type="submit" value="Submit" class="btn btn-primary" style="background-color: blue;">
+            </form>
+        </div>
+        <div class="container">
+            <div class="row movie-elements">
+                <% if(locals.total_results){ %>
+                    <% for(var i=1;i<=total_results;i++){ %>
+                        <div class="card" style="width: 15rem;">
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include("partials/footer.ejs") %>

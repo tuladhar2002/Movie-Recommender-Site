@@ -1,0 +1,134 @@
+body{
+    
+    background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='69.283' height='40' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0,0%,100%,1)'/><path d='M46.189-20L57.736 0M46.189 20l11.547 20m-46.189 0l11.547 20M11.547 0l11.547 20m40.415 30H40.415M28.868 30H5.774m23.094-40H5.774m57.735 20H40.415m0 20L28.868 50m11.547-60L28.868 10m46.188 0L63.509 30M5.774 10L-5.773 30m75.056 10H46.189L34.64 20 46.19 0h23.094C73.13 6.667 76.98 13.333 80.83 20zM57.736 60H34.64L23.094 40l11.547-20h23.095c3.848 6.667 7.698 13.333 11.547 20L57.736 60zm0-40H34.64L23.094 0l11.547-20h23.095L69.283 0c-3.87 6.7-8.118 14.06-11.547 20zM34.64 60H11.547L0 40l11.547-20h23.094L46.19 40 34.64 60zm0-40H11.547L0 0l11.547-20h23.094L46.19 0 34.64 20zM23.094 40H0l-5.773-10-5.774-10L0 0h23.094l11.547 20-11.547 20z'  stroke-width='1' stroke='hsla(225, 59%, 59%, 1)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-78,-12)' fill='url(%23a)'/></svg>");
+    background-blend-mode: multiply;
+    background-size: cover;
+    height: 100vh;
+}
+body, html{
+    margin:0;
+    padding: 0;
+    height: 100%;
+}
+#navbar-component .navbar{
+    padding-left: 20rem;
+    padding-right: 20rem;
+    color: aliceblue;
+}
+
+.nav-link, .navbar-brand{
+    color: aliceblue;
+}
+.logo{
+    border-radius: 50%;
+}
+.logo:hover{
+    box-shadow: 0 0 4px 4px rgb(48, 47, 47) ;
+    transform: scale(1.05);
+}
+.nav-link:hover{
+    transform: scale(1.05);
+}
+#body-elements{
+    padding-left: 20rem;
+    padding-right: 20rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+.row{
+    height: fit-content;
+    opacity: 1;
+}
+.search-titles-div{
+    font-family: 'PT Serif', serif;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    opacity: 0.91;
+    height: 70vh;
+    padding-top: 7rem;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Make sure the wrapper takes at least the full viewport height */
+}
+
+.results-page-div{
+    font-family: 'PT Serif', serif;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    opacity: 0.91;
+    padding-top: 2rem;
+    
+}
+.search-titles-div .text-center{
+    display: block;
+}
+.search-bar{
+    height: fit-content;
+    flex-wrap: nowrap;
+}
+.searchbar{
+    background-color: rgb(254, 255, 255);
+}
+.searchbar-results{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+}
+.btn {
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+   
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.movie-elements{
+   padding-left: 2rem;
+   padding-right: 2rem;
+   margin-top: 2rem;
+   margin-bottom: 2rem;
+   padding: 2rem;
+   display: flex;
+   flex-direction: row;
+   gap: 2rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Style for the footer */
+footer {
+    background-color: white;
+    margin-top: auto;
+  }
+
+.copyright-claim {
+    padding-bottom: 2px;
+    padding: 5px;
+    font-size: 14px;
+    color: gray;
+  }
+
+  @media (min-width: 600px) and ( max-width: 1200px) {
+    footer {
+        background-color: black;
+        width: 100%; /* Make the footer as wide as the screen */
+        max-width: 100vw; /* Set the maximum width to the viewport width */
+        margin-top: 77px; /* Push the footer to the bottom */
+      }
+  }

@@ -1,0 +1,29 @@
+<%- include("partials/header.ejs") %>
+
+<section id="body-elements">
+    <div class="container search-titles-div d-flex justify-content-center">
+        <div class="text-center col-xl-12">
+            <div class="row">
+                <h1 class="box">Search For A Movie</h1>
+            </div>
+            <div class="row d-flex justify-content-center align-items-center mt-5">
+                <div class="search-component col-lg-8 d-flex justify-content-center align-items-center">
+                    <div class="search-bar col-lg-12">
+                        <form action="/Movie" method="POST" class="search-items">
+                            <input class="form-control searchbar" id="exampleDataList" name="movieName" placeholder="Search Movie...">
+                            <div class="submit-button d-flex justify-content-center align-items-center mt-2">
+                                <input type="submit" value="Submit" class="btn btn-primary" style="background-color: blue;">
+                            </div>
+                    
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+   
+</section>
+
+
+<%- include("partials/footer.ejs") %>
