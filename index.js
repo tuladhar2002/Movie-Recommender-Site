@@ -12,8 +12,17 @@ const remaining_url = "&include_adult=false&language=en-US&page=1";
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//functions for various methods 
+function getDate(){
+    const current_year = new Date().getFullYear();
+    return current_year; 
+}
+
+
 app.get("/", (req, res)=>{
-    res.render("index.ejs");
+    res.render("index.ejs",{
+        current_year: getDate(),
+    });
 });
 app.post("/Movie", async(req,res)=>{
     const requestedMovie = req.body.movieName;
@@ -30,6 +39,7 @@ app.post("/Movie", async(req,res)=>{
     
     res.render("movie_result_page.ejs",{
         total_results: returned_dataSet.total_results,
+        current_year: getDate(),
     });
     //   res.render("index.ejs",{content: JSON.stringify(response.data)});
 });
