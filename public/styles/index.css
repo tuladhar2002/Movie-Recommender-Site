@@ -100,7 +100,10 @@ body, html{
    gap: 2rem;
 }
 
-
+.footer-partition-line{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
 
 
 
@@ -118,17 +121,35 @@ footer {
   }
 
 .copyright-claim {
-    padding-bottom: 2px;
-    padding: 5px;
+    padding-bottom: 2rem;
     font-size: 14px;
     color: gray;
   }
 
-  @media (min-width: 600px) and ( max-width: 1200px) {
-    footer {
-        background-color: black;
-        width: 100%; /* Make the footer as wide as the screen */
-        max-width: 100vw; /* Set the maximum width to the viewport width */
-        margin-top: 77px; /* Push the footer to the bottom */
-      }
+  @media (min-width: 600px) and ( max-width: 1500px) {
+    #navbar-component .navbar{
+        padding-left: 10rem;
+        padding-right: 10rem;
+        color: aliceblue;
+    }
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Make sure the wrapper takes at least the full viewport height */
+    }
+
+    #body-elements{
+        padding-left: 10rem;
+        padding-right: 10rem;
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+    .search-titles-div{
+        font-family: 'PT Serif', serif;
+        background-color: rgb(255, 255, 255);
+        border-radius: 5px;
+        opacity: 0.91;
+        height: 70vh;
+        padding-top: 7rem;
+    }
   }
