@@ -11,11 +11,11 @@
         <div class="container">
             <div class="row movie-elements">
                 <% if(locals.total_results){ %>
-                    <% for(var i=1;i<=total_results;i++){ %>
+                    <% for(var i=0;i<total_results;i++){ %>
                         <div class="card" style="width: 15rem;">
-                            <img src="..." class="card-img-top" alt="...">
+                            <img src="data:image/jpeg;base64, <%= posters[i] %>" class="card-img-top" alt="...">
                             <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
+                            <h5 class="card-title"><%= locals.titles[i] %></h5>
                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                             <a href="#" class="btn btn-primary">Go somewhere</a>
                             </div>
