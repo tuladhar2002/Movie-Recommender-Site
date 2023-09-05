@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
+import mongoose from "mongoose";
 
 const app = express();
 const port = 3000;
@@ -12,16 +13,18 @@ const remaining_url = "&include_adult=false&language=en-US&page=1";
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//functions for various methods 
+// connect to dbs with name moviesDB or if not exists, it creates the dbs.
+mongoose.connect("mongodb://localhost:27017/moviesDB", { useNewUrlParser: true}); 
 
-//get movie title from the API and return it in array format
-function getMovieTitle(movies){
-    const movie_titles = [];
-    for(var movie in movies){
-        movie_titles.push(movie.original_title);
-    }
-    return movie_titles;
-}
+//create a schema for how data is to be structured inside dbs
+const movieSchema = new mongoose.Schema ({
+    name: String,
+});
+
+//create collection that will use the format as initialized in movieSchema
+const Movie = mongoose.model("Movie", movieSchema )
+
+//functions for various methods 
 
 
 //function for footer copyrights year
@@ -41,7 +44,13 @@ app.get("/", (req, res)=>{
 app.post("/Movie", async(req,res)=>{
     //get requested movie from user
     const requestedMovie = req.body.movieName;
-    console.log(requestedMovie);
+
+
+    //we create a fruit obj to insert or save in the dbs
+    var movie = new Movie({
+        name: requestedMovie,
+    });
+    movie.save();
 
     //print out full url for the req to API
     console.log(reqMovieDetails_url+requestedMovie+remaining_url);
@@ -66,25 +75,29 @@ app.post("/Movie", async(req,res)=>{
     //get movie titles
     const titles = [];
     const posters = [];
-    for (var movie of returned_dataSet){
-        var poster_url;
-        titles.push(movie.original_title);
-        if(movie.poster_path){
-            poster_url = image_url + movie.poster_path;
-            const testImage = await axios.get(poster_url,{
-                headers:{
-                  Authorization: `Bearer ${movieDB_API_accessToken}`,
-                },
-                responseType: 'arraybuffer',
-            });
-            const imageBuffer = Buffer.from(testImage.data);
-            const base64Image = imageBuffer.toString('base64');
-            posters.push(base64Image);  
-        } else{
-            poster_url = "No Poster Available" 
-            posters.push(poster_url);
-        }
+    var iterator = 0; // iterator to only have 12 elements in the first page
 
+    for (var movie of returned_dataSet){
+        if (iterator <= 12){
+            var poster_url;
+            titles.push(movie.original_title);
+            if(movie.poster_path){
+                poster_url = image_url + movie.poster_path;
+                const testImage = await axios.get(poster_url,{
+                    headers:{
+                    Authorization: `Bearer ${movieDB_API_accessToken}`,
+                    },
+                    responseType: 'arraybuffer',
+                });
+                const imageBuffer = Buffer.from(testImage.data);
+                const base64Image = imageBuffer.toString('base64');
+                posters.push(base64Image);  
+            } else{
+                poster_url = "No Poster Available" 
+                posters.push(poster_url);
+            }
+        }
+        iterator++;
     };
 
     
