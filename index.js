@@ -2,13 +2,15 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 const port = 3000;
 
-const movieDB_API_accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZTM0NDM4MDVmOTBjY2RhYTliYjlmYTZkYzY1MjA4NiIsInN1YiI6IjY0ZTgyOGExNTI1OGFlMDBhZGQ0NTE2NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.T9I7J-d5RbEO17cyx6H27zKifMNIiEmjTCzr2DxxHRo";
-const reqMovieDetails_url = "https://api.themoviedb.org/3/search/movie?query=";
-const remaining_url = "&include_adult=false&language=en-US&page=1";
+const movieDB_API_accessToken = process.env.movieDB_API_accessToken;
+const reqMovieDetails_url = process.env.reqMovieDetails_url;
+const remaining_url = process.env.remaining_url;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
