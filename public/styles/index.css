@@ -126,6 +126,12 @@ body, html{
 .align-center{
     text-align: center;
 }
+.register-button{
+    text-align: right;
+}
+.register-user{
+    max-width: 50rem;
+}
 .full-screen{
     height: 100vh;
 }

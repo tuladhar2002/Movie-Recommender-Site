@@ -1,6 +1,9 @@
 <%- (include("partials/header_login.ejs")) %>
 <div class="full-screen d-flex justify-content-center align-items-center">
     <div class="login-card">
+        <div class="register-button">
+            <a href="/register">Register Now</a>
+        </div>
         <form class="login-items" action="/login" method="POST">
             <img src="images/logo-main.png" class="logo-login" alt="Logo" width="90" height="80" class="d-inline-flex align-text-top">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
@@ -19,7 +22,7 @@
                 <div class="mb-1">
                     or
                 </div>
-                <a class="w-75 btn btn-lg btn-social btn-google align-center mb-2">
+                <a class="w-75 btn btn-lg btn-social btn-google align-center mb-2" href="/auth/google">
                     <img src="images/google.svg" class="mt-2" alt="google-icon" height="30rem" /> 
                     <span class="align-center fa fa-google "></span> Sign in with Google
                 </a>

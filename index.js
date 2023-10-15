@@ -1,10 +1,17 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config();
+import session from "express-session";
+import passport from "passport";
+import passportLocalMongoose from "passport-local-mongoose";
+import googleStrategy from "passport-google-oauth20";
+import findOrCreate from "mongoose-findorcreate";
 
+
+const GoogleStrategy = googleStrategy.Strategy;
 const app = express();
 const port = 3000;
 
@@ -15,16 +22,73 @@ const remaining_url = process.env.remaining_url;
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(session({
+    secret: "MovieDBS",
+    resave: false,
+    saveUninitialized: false,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 // connect to dbs with name moviesDB or if not exists, it creates the dbs.
-mongoose.connect("mongodb://localhost:27017/moviesDB", { useNewUrlParser: true}); 
+mongoose.connect(process.env.mongoDB_connect); 
 
 //create a schema for how data is to be structured inside dbs
-const movieSchema = new mongoose.Schema ({
+const userSchema = new mongoose.Schema ({
     name: String,
+    username: String,
+    email: String,
+    password: String,
+    history: String,
+    favourites: String,
+    googleId: String,
+    active: Boolean,
 });
 
+userSchema.plugin(passportLocalMongoose, {usernameField: "email"}); //only for mongoose schema for hashing and salting
+userSchema.plugin(findOrCreate);
+
 //create collection that will use the format as initialized in movieSchema
-const Movie = mongoose.model("Movie", movieSchema )
+const User = mongoose.model("User", userSchema )
+
+passport.use(User.createStrategy());
+
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+//passport.js way of serialize deserializa
+passport.serializeUser(function(user, cb) {
+    process.nextTick(function() {
+      return cb(null, {
+        id: user.id,
+        username: user.username,
+        picture: user.picture
+      });
+    });
+});
+  
+passport.deserializeUser(function(user, cb) {
+process.nextTick(function() {
+    return cb(null, user);
+});
+});
+
+//oauth20
+passport.use(new GoogleStrategy({
+    clientID: process.env.oauth_clientID,
+    clientSecret: process.env.oauth_clientSecret,
+    callbackURL: "http://localhost:3000/auth/google/Movies",
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+
 
 //functions for various methods 
 
@@ -37,9 +101,12 @@ function getDate(){
 
 //home page 
 app.get("/", (req, res)=>{
-    res.render("index.ejs",{
-        current_year: getDate(),
-    });
+    if(req.isAuthenticated()){
+        res.render("index.ejs");
+    }else{
+        res.render("login.ejs");
+    }
+    
 });
 
 //after user searches for a movie
@@ -49,10 +116,7 @@ app.post("/Movie", async(req,res)=>{
 
 
     //we create a fruit obj to insert or save in the dbs
-    var movie = new Movie({
-        name: requestedMovie,
-    });
-    movie.save();
+   
 
     //print out full url for the req to API
     console.log(reqMovieDetails_url+requestedMovie+remaining_url);
@@ -64,7 +128,7 @@ app.post("/Movie", async(req,res)=>{
         },
       });
     const returned_dataSet = response.data.results;
-    console.log(returned_dataSet);
+    // console.log(returned_dataSet);
 
     var total_results;
     if(response.data.total_results >= 12){
@@ -112,17 +176,81 @@ app.post("/Movie", async(req,res)=>{
     });
     
 });
+// <----register ---->
+app.get("/register", async(req, res)=>{
+    res.render("register.ejs");
+});
+app.post("/register", async(req, res)=>{
+    const name = req.body.fName + " "+ req.body.lName;
+    const username = req.body.userName;
+    const email = req.body.email;
+    const password = req.body.password;
+    
+    //registering and authenticating cookie session
+    User.register({name:name, username: username, email: email}, password, function(err, user){ //registering user cookie seesion
+        if(err){
+            console.log(err);
+        } else {
+            res.render("login.ejs");
+        };
+   });
+});
+
+
 
 // <----- login ------->
 app.get("/login", async(req, res)=>{
-    res.render("login.ejs", {
+    res.redirect("/", {
         current_year: new Date().getFullYear(),
     });
 });
+
 app.post("/login", async(req, res)=>{
-    console.log(req.body.email);
-    console.log(req.body.password);
+    const user = new User({
+        email: req.body.email,
+        password: req.body.password,
+    });
+    console.log(user);
+
+    req.login(user, function(err){
+        if (err){
+            console.log("here");
+            console.log(err);
+        }else {
+            try{
+                passport.authenticate("local")(req, res, function(err){ // authenticate success then proceeds with function
+                    res.redirect("/home");
+                });  
+            }catch(err){
+                console.log(err);
+            };
+           
+        };
+    });
+
 });
+app.get("/home", (req, res)=>{
+    if(req.isAuthenticated()){ //if alrwady authenticated or logged in, simply renders secrets 
+        res.render("index.ejs");
+    } else {
+        res.redirect("login.ejs"); //if not authenticated login first
+    }
+});
+
+// <---oauth------>>
+app.get("/auth/google", passport.authenticate('google', {
+ 
+    scope: ['profile']
+ 
+}));
+
+//redirect from google response roue
+app.get('/auth/google/Movies', 
+  passport.authenticate('google', { failureRedirect: "login.ejs" }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  });
 
 app.listen(port, ()=>{
     console.log(`Server running on port ${port}`);
