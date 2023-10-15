@@ -22,6 +22,10 @@ body, html{
 .logo{
     border-radius: 50%;
 }
+.logo-login{
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+}
 .logo:hover{
     box-shadow: 0 0 4px 4px rgb(48, 47, 47) ;
     transform: scale(1.05);
@@ -106,9 +110,25 @@ body, html{
 }
 
 
+.login-card{
+    min-width: 30rem;
+    min-height: 30rem;
+    background-color: aliceblue;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 2rem;
+    box-shadow: 4px 4px 7px 7px rgb(136, 133, 133) ;
 
-
-
+}
+.login-card .login-items{
+    text-align: center;
+}
+.align-center{
+    text-align: center;
+}
+.full-screen{
+    height: 100vh;
+}
 
 
 

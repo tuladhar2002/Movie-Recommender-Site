@@ -1,0 +1,34 @@
+<%- (include("partials/header_login.ejs")) %>
+<div class="full-screen d-flex justify-content-center align-items-center">
+    <div class="login-card">
+        <form class="login-items" action="/login" method="POST">
+            <img src="images/logo-main.png" class="logo-login" alt="Logo" width="90" height="80" class="d-inline-flex align-text-top">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email">
+                <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+                <label for="floatingPassword">Password</label>
+            </div>
+
+            <div class="">
+                <button class="w-50 btn btn-lg btn-primary mb-1" type="submit">Sign in</button>
+                <div class="mb-1">
+                    or
+                </div>
+                <a class="w-75 btn btn-lg btn-social btn-google align-center mb-2">
+                    <img src="images/google.svg" class="mt-2" alt="google-icon" height="30rem" /> 
+                    <span class="align-center fa fa-google "></span> Sign in with Google
+                </a>
+                <a class="w-75 btn btn-lg btn-social btn-facebook align-center">
+                    <img src="images/facebook.svg" class="mt-2" alt="facebook-icon" height="30rem" /> 
+                    <span class="align-center fa fa-facebook "></span> Sign in with Facebook
+                </a>
+            </div>
+            <p class="mt-5 mb-3 text-muted">© <%= locals.current_year %></p>
+        </form>
+    </div>
+</div>

@@ -112,6 +112,18 @@ app.post("/Movie", async(req,res)=>{
     });
     
 });
+
+// <----- login ------->
+app.get("/login", async(req, res)=>{
+    res.render("login.ejs", {
+        current_year: new Date().getFullYear(),
+    });
+});
+app.post("/login", async(req, res)=>{
+    console.log(req.body.email);
+    console.log(req.body.password);
+});
+
 app.listen(port, ()=>{
     console.log(`Server running on port ${port}`);
 });
