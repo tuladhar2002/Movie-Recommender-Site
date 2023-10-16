@@ -111,16 +111,15 @@ passport.use(new FacebookStrategy({
 function getDate(){
     const current_year = new Date().getFullYear();
     return current_year; 
-}
+};
 
 //home page 
-app.get("/", (req, res)=>{
+app.get("/", (req, res)=>{ //main gateway
     if(req.isAuthenticated()){
         res.render("index.ejs");
     }else{
         res.render("login.ejs");
-    }
-    
+    };
 });
 
 //after user searches for a movie
@@ -190,7 +189,7 @@ app.post("/Movie", async(req,res)=>{
     });
     
 });
-// <----register ---->
+// <----register---->
 app.get("/register", async(req, res)=>{
     res.render("register.ejs");
 });
@@ -213,42 +212,45 @@ app.post("/register", async(req, res)=>{
 
 
 // <----- login ------->
-app.get("/login", async(req, res)=>{
-    res.redirect("/", {
-        current_year: new Date().getFullYear(),
+app.get("/failure", async(req, res)=>{
+    res.render("login.ejs", {
+        failure_response: "Invalid Username or Password",
     });
 });
 
-app.post("/login", async(req, res)=>{
+
+app.post("/login", async (req, res) => {
     const user = new User({
         email: req.body.email,
         password: req.body.password,
     });
-    console.log(user);
 
-    req.login(user, function(err){
-        if (err){
-            console.log("here");
+    req.login(user, function (err) {
+        if (err) {
+            console.log("An error occurred during login:");
             console.log(err);
-        }else {
-            try{
-                passport.authenticate("local")(req, res, function(err){ // authenticate success then proceeds with function
-                    res.redirect("/home");
-                });  
-            }catch(err){
-                console.log(err);
-            };
-           
-        };
+            res.redirect("/failure"); // Redirect to a login page or any other appropriate page
+        } else {
+            passport.authenticate('local', {failureRedirect: '/failure', failureMessage: true })(req,res, function(){
+                res.redirect("/home");
+            });
+        }
     });
-
 });
+
+    
+
+     
+   
+           
+           
+   
 app.get("/home", (req, res)=>{
     if(req.isAuthenticated()){ //if alrwady authenticated or logged in, simply renders secrets 
         res.render("index.ejs");
     } else {
-        res.redirect("login.ejs"); //if not authenticated login first
-    }
+        res.render("login.ejs"); //if not authenticated login first
+    };
 });
 
 // <---oauth------>>
@@ -262,14 +264,14 @@ app.get("/auth/facebook", passport.authenticate('facebook'));
 
 //redirect from google response roue
 app.get('/auth/google/Movies', 
-  passport.authenticate('google', { failureRedirect: "login.ejs" }),
+  passport.authenticate('google', { failureRedirect: "/failure" }),
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect("/");
 });
 
 app.get('/auth/facebook/Movies',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  passport.authenticate('facebook', { failureRedirect: '/failure' }),
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect('/');
