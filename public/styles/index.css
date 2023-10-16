@@ -129,6 +129,13 @@ body, html{
 .register-button{
     text-align: right;
 }
+.logout-button{
+    background-color: aliceblue;
+    padding: .5rem;
+    border-radius: 5px;
+    text-align: right;
+    color: aliceblue;
+}
 .register-user{
     max-width: 50rem;
 }

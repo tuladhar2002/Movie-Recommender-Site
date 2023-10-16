@@ -9,9 +9,11 @@ import passport from "passport";
 import passportLocalMongoose from "passport-local-mongoose";
 import googleStrategy from "passport-google-oauth20";
 import findOrCreate from "mongoose-findorcreate";
+import facebookStrategy from "passport-facebook";
 
 
 const GoogleStrategy = googleStrategy.Strategy;
+const FacebookStrategy = facebookStrategy.Strategy;
 const app = express();
 const port = 3000;
 
@@ -44,6 +46,7 @@ const userSchema = new mongoose.Schema ({
     history: String,
     favourites: String,
     googleId: String,
+    facebookId: String,
     active: Boolean,
 });
 
@@ -88,6 +91,17 @@ passport.use(new GoogleStrategy({
   }
 ));
 
+passport.use(new FacebookStrategy({
+    clientID: process.env.facebook_appID,
+    clientSecret: process.env.facebook_appSecret,
+    callbackURL: "http://localhost:3000/auth/facebook/Movies"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 
 //functions for various methods 
@@ -244,13 +258,29 @@ app.get("/auth/google", passport.authenticate('google', {
  
 }));
 
+app.get("/auth/facebook", passport.authenticate('facebook'));
+
 //redirect from google response roue
 app.get('/auth/google/Movies', 
   passport.authenticate('google', { failureRedirect: "login.ejs" }),
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect("/");
-  });
+});
+
+app.get('/auth/facebook/Movies',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+});
+
+app.get("/logout", (req, res)=>{
+    req.logout(function(err) {
+    if (err) { return next(err); }
+        res.redirect("/");
+    });
+});
 
 app.listen(port, ()=>{
     console.log(`Server running on port ${port}`);
